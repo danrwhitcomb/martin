@@ -1,0 +1,43 @@
+.view-container {
+    .device {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        width: 100%;
+        min-width: 640px;
+        margin-bottom: 10px;
+
+        box-shadow: 1px 1px 2px grey;
+        border-radius: 1.5px;
+
+        > div {
+            margin-right: 10px;
+            padding: 10px;
+
+            p {
+                color: grey;
+                font-size: 12px;
+                margin-bottom: 2px;
+            }
+        }
+
+        .device-addr {
+            margin-left: 10px;
+        }
+
+        .device-services ul {
+            list-style: none;
+            margin: 0;
+        }
+
+        .device-add {
+            align-self: center;
+            margin-left: auto;
+
+            button {
+                margin-bottom: 0;
+            }
+        }
+
+    }
+}

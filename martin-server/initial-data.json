@@ -1,0 +1,47 @@
+[
+    {
+        "model": "common.Service",
+        "pk": 1,
+        "fields": {
+            "name": "camera",
+            "description": "The camera service means the device is equipped with a camera"
+        }
+    },
+    {
+        "model": "common.Service",
+        "pk": 2,
+        "fields": {
+            "name": "voice",
+            "description": "The voice service means the device is equipped with a microphone."
+        }
+    },
+    {
+        "model": "common.Service",
+        "pk": 3,
+        "fields": {
+            "name": "audio",
+            "description": "The audio service means the device is equipped with a speaker."
+        }
+    },
+    {
+        "model": "common.DeviceState",
+        "pk": 1,
+        "fields": {
+            "value": "pending"
+        }
+    },
+    {
+        "model": "common.DeviceState",
+        "pk": 2,
+        "fields": {
+            "value": "added"
+        }
+    },
+    {
+        "model": "common.DeviceState",
+        "pk": 3,
+        "fields": {
+            "value": "removed"
+        }
+    }
+]

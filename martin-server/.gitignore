@@ -1,0 +1,9 @@
+.vscode
+*-stats.json
+*.log
+*.pyc
+**/node_modules
+__pycache__
+
+**/bundles
+**/webpack_bundles

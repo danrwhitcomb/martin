@@ -1,0 +1,49 @@
+{% load render_bundle from webpack_loader %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>MARTIN - Login</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% render_bundle 'main' 'css' %}
+  </head>
+
+  <body>
+    <style>
+        .login-container {
+            width: 400px;
+            padding: 10px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 100px;
+            box-shadow: 1px 1px 3px grey;
+            border-radius: 5px;
+        }
+    </style>
+    <div class='login-container'>
+        <h2>MARTIN</h2>
+        <form class="log-in-form" action="/login" method="POST">
+            <label>Username
+                <input type="text" name="username" placeholder="Username">
+            </label>
+            <label>Password
+                <input type="password" name="password" placeholder="Password">
+            </label>
+            <p><input type="submit" class="button expanded" value="Log in"></input></p>
+            <p class="text-center"><a href="#">Forgot your password?</a></p>
+        </form>
+    </div>
+
+
+    <!-- Webpack rendered Javascript -->
+    {% render_bundle 'main' 'js' %}
+
+    {% block scripts %}{% endblock %}
+  </body>
+</html>
+
+

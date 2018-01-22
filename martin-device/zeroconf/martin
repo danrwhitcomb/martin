@@ -1,0 +1,82 @@
+#! /usr/bin/python3
+
+import argparse
+import os
+
+from lxml import etree as ET
+from xml.dom import minidom
+
+from martin import config
+
+
+CONFIG_PATH = '/etc/martin/service.yml'
+AVAHI_DIR = '/etc/avahi/services'
+SERVICE_TEMPLATE = os.path.join(os.path.dirname(__file__), 'service.template')
+
+configuration = None
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('command', choices=['start', 'stop', 'restart'])
+    parser.add_argument('-c', '--config', help='Path to configuration file')
+
+    return parser.parse_args()
+
+def get_service_path():
+    return os.path.join(AVAHI_DIR, configuration['mdns']['service'] + '.service')
+
+def remove_existing_configuration():
+    service_path = get_service_path()
+    if os.path.isfile(service_path):
+        os.remove(get_service_path())
+
+def load_service_template():
+    return ET.parse(SERVICE_TEMPLATE)
+
+def generate_avahi_service(service_name, port, properties):
+    tree = load_service_template()
+    service = tree.getroot()[1]
+
+    type = ET.SubElement(service, 'type')
+    type.text = '_' + service_name + '._tcp'
+    
+    port_elem = ET.SubElement(service, 'port')
+    port_elem.text = str(port)
+
+    for key, value in properties:
+        txt_record = ET.SubElement('txt-record')
+        txt_record.text = '{}={}'.format(key, value)
+
+    with open(get_service_path(), 'wb') as service_file:
+        tree.write(service_file, pretty_print=True,
+                    encoding='UTF-8', 
+                    xml_declaration=True,
+                    standalone=True) 
+
+
+def start_mdns_service():
+    remove_existing_configuration()
+
+    mdns = configuration['mdns']
+    generate_avahi_service(mdns['service'], mdns['port'], {})
+
+def stop_mdns_service():
+    remove_existing_configuration()
+    
+def create_configuration(config_path):
+    global configuration
+    config.initialize_configuration(config_path)
+    configuration = config.get_configuration()
+
+def main():
+    args = parse_args()
+    create_configuration(args.config if args.config is not None else CONFIG_PATH)
+
+    if args.command == 'start' or \
+        args.command == 'restart':
+        start_mdns_service()
+    elif args.command == 'stop':
+        stop_mdns_service()
+
+
+main()
