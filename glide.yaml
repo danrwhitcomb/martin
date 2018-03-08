@@ -1,0 +1,21 @@
+package: martin
+import:
+- package: github.com/jinzhu/gorm
+  version: ^1.9.1
+  subpackages:
+  - dialects/sqlite
+- package: github.com/revel/modules
+  version: ^0.19.0
+  subpackages:
+  - static/app/controllers
+  - testrunner/app
+  - testrunner/app/controllers
+- package: github.com/revel/revel
+  version: ^0.19.0
+  subpackages:
+  - testing
+  - cmd/revel
+- package: github.com/revel/cmd
+  version: ^0.19.0
+  subpackages:
+  - revel

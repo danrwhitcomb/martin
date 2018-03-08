@@ -1,11 +1,11 @@
 package app
 
 import (
-	"log"
-	"strings"
-	"github.com/revel/revel"
+	"martin/martin-device/migrations"
+
 	"github.com/jinzhu/gorm"
-    "github.com/jinzhu/gorm/dialects/sqlite"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"github.com/revel/revel"
 )
 
 var (
@@ -14,9 +14,9 @@ var (
 
 	// BuildTime revel app build-time (ldflags)
 	BuildTime string
-)
 
-var database *DB
+	Database *gorm.DB
+)
 
 func init() {
 	// Filters is the default set of global filters.
@@ -38,7 +38,7 @@ func init() {
 	// Register startup functions with OnAppStart
 	// revel.DevMode and revel.RunMode only work inside of OnAppStart. See Example Startup Script
 	// ( order dependent )
-	revel.OnAppStart(InitDB)
+	revel.OnAppStart(initDB)
 }
 
 // HeaderFilter adds common security headers
@@ -53,15 +53,23 @@ var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
 }
 
 func initDB() {
+	log := revel.AppLog
 	// revel.DevMod and revel.RunMode work here
 	// Use this script to check for dev mode and set dev/prod startup scripts here!
-	dbPath, found = revel.Config.String('database.path')
-	if !found || dbPath == '' {
-		log.Fatal('No database path in settings')
+	dbPath, found := revel.Config.String("database.path")
+
+	if !found || dbPath == "" {
+		log.Fatal("No database path in settings")
 	}
 
-	database, err := gorm.Open("sqlite3", dbPath)
+	log.Infof("Connecting to database %s", dbPath)
+	db, err := gorm.Open("sqlite3", dbPath)
 	if err != nil {
-		log.Fatal('Failed to open database at {}' + dbPath)
+		log.Fatal("Failed to open database at "+dbPath, err)
 	}
+
+	Database = db // Great we have the database connection
+	// Now we bring it up-to-date
+	runner := migrations.MigrationRunner{}
+	runner.Run(db)
 }

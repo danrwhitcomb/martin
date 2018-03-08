@@ -3,11 +3,11 @@
 # This file defines all application routes (Higher priority routes first)
 #
 
-module:testrunner
-# module:jobs
+# Websocket setup
+WS      /                                       WebSocketController.Connection
 
-
-GET     /                                       App.Index
+# HTTP Routes
+GET     /                                       WebController.Index
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

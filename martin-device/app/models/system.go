@@ -7,27 +7,30 @@ import (
 type SystemState int
 
 const (
-	Available SystemState = iota + 1
-	Owned
+	Unconfigured SystemState = iota + 1
+	Configured
 )
 
 type Master struct {
 	gorm.Model
 
-	name     string
-	ip       string
-	user     string
-	password string
+	Name     string
+	Ip       string
+	User     string
+	Password string
 }
 
 type Configuration struct {
-	name string
+	Name string
 }
 
 type System struct {
 	gorm.Model
 
-	state  SystemState
-	master Master
-	config Configuration
+	State    SystemState
+	Master   Master
+	MasterID int
+
+	Config   Configuration
+	ConfigID int
 }
